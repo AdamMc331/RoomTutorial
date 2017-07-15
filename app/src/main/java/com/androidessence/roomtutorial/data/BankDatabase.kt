@@ -10,7 +10,7 @@ import com.androidessence.roomtutorial.entities.Transaction
 /**
  * Database class.
  */
-@Database(entities = arrayOf(Account::class, Transaction::class), version = 2)
+@Database(entities = arrayOf(Account::class, Transaction::class), version = 1)
 abstract class BankDatabase : RoomDatabase() {
 	abstract fun bankDao(): BankDAO
 
@@ -20,7 +20,6 @@ abstract class BankDatabase : RoomDatabase() {
 		fun getInMemoryDatabase(context: Context): BankDatabase {
 			if (INSTANCE == null) {
 				INSTANCE = Room.databaseBuilder(context, BankDatabase::class.java, "bank-database")
-						.allowMainThreadQueries()
 						.build()
 			}
 

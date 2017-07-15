@@ -14,15 +14,21 @@ interface BankDAO {
     @Query("SELECT * FROM account")
     fun getAllAccounts(): List<Account>
 
-    @Query("SELECT * FROM transaction")
+    @Query("SELECT * FROM transactionTable")
     fun getAllTransactions(): List<Transaction>
+
+    @Query("SELECT * FROM transactionTable WHERE account = :arg0")
+    fun getTransactionsForAccount(account: String): List<Transaction>
 
     @Insert
     fun insertAccount(vararg accounts: Account)
 
     @Insert
-    fun insertTransaction(vararg transactions: Transaction)
+    fun insertTransaction(vararg transactions: Transaction): List<Long>
 
     @Query("DELETE FROM account")
     fun deleteAllAccounts()
+
+    @Query("DELETE FROM transactionTable")
+    fun deleteAllTransactions()
 }

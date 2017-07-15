@@ -1,10 +1,12 @@
 package com.androidessence.roomtutorial
 
+import android.arch.persistence.room.Room
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.androidessence.roomtutorial.data.BankDAO
 import com.androidessence.roomtutorial.data.BankDatabase
 import com.androidessence.roomtutorial.entities.Account
+import com.androidessence.roomtutorial.entities.Transaction
 import org.junit.*
 import org.junit.Assert.*
 import org.junit.runner.RunWith
@@ -22,7 +24,10 @@ class RoomTesting {
 
     @Before
     fun createDb() {
-        bankDatabase = BankDatabase.getInMemoryDatabase(activityRule.activity)
+        //bankDatabase = BankDatabase.getInMemoryDatabase(activityRule.activity)
+        bankDatabase = Room.inMemoryDatabaseBuilder(activityRule.activity, BankDatabase::class.java)
+                .allowMainThreadQueries()
+                .build()
         bankDao = bankDatabase.bankDao()
 
         bankDao.deleteAllAccounts()
@@ -36,11 +41,37 @@ class RoomTesting {
 
     @Test
     fun writeReadAccount() {
-        val account = Account("Checking")
-        bankDao.insertAccount(account)
+        val testAccount = Account("Checking")
+        bankDao.insertAccount(testAccount)
 
         val accounts = bankDao.getAllAccounts()
-        assertEquals(accounts[0], account)
+        assertEquals(accounts[0], testAccount)
+    }
+
+    @Test
+    fun writeReadTransaction() {
+        val testAccount = Account("Checking")
+        bankDao.insertAccount(testAccount)
+
+        val testTransaction = Transaction(5.00, true, "Lunch", "Checking")
+        val id = bankDao.insertTransaction(testTransaction).first()
+        testTransaction.id = id
+
+        val transactions = bankDao.getAllTransactions()
+        assertEquals(transactions[0], testTransaction)
+    }
+
+    @Test
+    fun writeReadTransactionForAccount() {
+        val testAccount = Account("Checking")
+        bankDao.insertAccount(testAccount)
+
+        val testTransaction = Transaction(5.00, true, "Lunch", "Checking")
+        val id = bankDao.insertTransaction(testTransaction).first()
+        testTransaction.id = id
+
+        val transactions = bankDao.getTransactionsForAccount("Checking")
+        assertEquals(transactions[0], testTransaction)
     }
 }
 
