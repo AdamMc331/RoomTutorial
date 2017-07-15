@@ -4,7 +4,7 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 import com.androidessence.roomtutorial.entities.Account
-import com.androidessence.roomtutorial.entities.AccountAndTransactions
+import com.androidessence.roomtutorial.entities.AccountTransactions
 import com.androidessence.roomtutorial.entities.Transaction
 
 /**
@@ -22,7 +22,7 @@ interface BankDAO {
     fun getTransactionsForAccount(account: String): List<Transaction>
 
     @Query("SELECT * FROM account")
-    fun getAccountsWithTransactions(): List<AccountAndTransactions>
+    fun getAccountsWithTransactions(): List<AccountTransactions>
 
     @Insert
     fun insertAccount(vararg accounts: Account)
