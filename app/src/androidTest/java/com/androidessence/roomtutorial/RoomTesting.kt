@@ -73,6 +73,20 @@ class RoomTesting {
         val transactions = bankDao.getTransactionsForAccount("Checking")
         assertEquals(transactions[0], testTransaction)
     }
+
+    @Test
+    fun getAccountsWithTransactions() {
+        val testAccount = Account("Checking")
+        bankDao.insertAccount(testAccount)
+
+        val testTransaction = Transaction(5.00, true, "Lunch", "Checking")
+        val id = bankDao.insertTransaction(testTransaction).first()
+        testTransaction.id = id
+
+        val accountsWithTransactions = bankDao.getAccountsWithTransactions()
+        assertEquals(accountsWithTransactions[0].account, testAccount)
+        assertEquals(accountsWithTransactions[0].transactions[0], testTransaction)
+    }
 }
 
 //@RunWith(AndroidJUnit4.class)

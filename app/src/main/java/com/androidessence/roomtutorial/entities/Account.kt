@@ -2,6 +2,7 @@ package com.androidessence.roomtutorial.entities
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.Relation
 
 /**
  * Represents a bank account for the user.
